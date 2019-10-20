@@ -5,13 +5,16 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: {y : 0},
-            collide: true
+            gravity: {y : 400},
+            enableBody: true
         }
     },
-    scene: [Menu, FireLevel]
+    scene: [Menu, FireLevel, BoulderLevel]
 };
 
 const game = new Phaser.Game(config);
 const gameState = {}
 const projectiles = {}
+
+gameState.score = 0
+// let fireGroup
