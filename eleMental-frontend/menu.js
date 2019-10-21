@@ -13,6 +13,8 @@ class Menu extends Phaser.Scene {
         gameState.time = 0
         gameState.fireDelay = 500
         gameState.boulderDelay = 700
+        gameState.speed = 250
+        gameState.scoreTimer = 1000
         
         this.image = this.add.image(600,400,'eleMental');
 
@@ -23,6 +25,10 @@ class Menu extends Phaser.Scene {
 
             if(e.key === "3") {
                 this.scene.start("boulderLevel");
+            }
+
+            if(e.key === "4") {
+                this.scene.start("missileLevel");
             }
         }, this);
 

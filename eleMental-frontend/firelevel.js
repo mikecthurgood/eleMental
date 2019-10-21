@@ -5,7 +5,7 @@ class FireLevel extends Phaser.Scene {
     }
 
     preload() {
-        this.textures.remove('background');
+        // this.textures.remove('background');
         this.load.image('background', 'assets/background.png');
         // this.load.image('background2', 'assets/background green.png')
         this.load.image('face', 'assets/scared-face.png');
@@ -17,9 +17,6 @@ class FireLevel extends Phaser.Scene {
     create() {
 
         gameState.time = gameState.timeOrigin
-
-
-        let shapes = this.cache.json.get('shapes');
 
         this.background = this.add.image(600,400,'background');
 
@@ -115,7 +112,7 @@ class FireLevel extends Phaser.Scene {
 
 
           const scoreLoop = this.time.addEvent({
-            delay: 1000,
+            delay: gameState.scoreTimer,
             callback: increaseScore,
             callbackScope: this,
             loop: true,
@@ -187,7 +184,10 @@ class FireLevel extends Phaser.Scene {
 
         if (gameState.time === 0) {
           gameState.fireDelay = gameState.fireDelay * 0.8
-          gameState.timeOrigin += 3
+          gameState.timeOrigin += 1
+          gameState.scoreTimer = gameState.scoreTimer * 1.1 
+
+
           this.scene.start("boulderLevel")
         }
 

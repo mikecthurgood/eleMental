@@ -5,8 +5,8 @@ class BoulderLevel extends Phaser.Scene {
     }
 
     preload() {
-        this.textures.remove('background');
-        this.load.image('background', 'assets/background green.png');
+        // this.textures.remove('background');
+        this.load.image('background-green', 'assets/background green.png');
         this.load.image('face', 'assets/scared-face.png');
         this.load.image('boulder', 'assets/boulder.png')
 
@@ -16,8 +16,7 @@ class BoulderLevel extends Phaser.Scene {
 
       gameState.time = gameState.timeOrigin
 
-
-        this.background = this.add.image(600,400,'background');
+        this.background = this.add.image(600,400,'background-green');
 
         gameState.scoreText = this.add.text(100, 750, 'Score: 0', { fontSize: '40px', fill: '#ffffff' })
 
@@ -31,7 +30,7 @@ class BoulderLevel extends Phaser.Scene {
         function boulderGen () {
           if (currentlyPlaying === true) {
             const xCoord = randomLocation(100, 1100)
-            const velocity = Math.random() * 500
+            // const velocity = Math.random() * 500
             const bounce = Math.random()
             projectiles.boulder = boulders.create(xCoord, 0,'boulder');
             projectiles.boulder.setScale(.4)
@@ -123,7 +122,7 @@ class BoulderLevel extends Phaser.Scene {
           }
 
           const timerLoop = this.time.addEvent({
-            delay: 1000,
+            delay: gameState.scoreTimer,
             callback: decreaseTimer,
             callbackScope: this,
             loop: true,
@@ -182,8 +181,9 @@ class BoulderLevel extends Phaser.Scene {
 
         if (gameState.time === 0) {
           gameState.boulderDelay = gameState.boulderDelay * 0.8
-          gameState.timeOrigin += 3
-          this.scene.start("fireLevel")
+          gameState.timeOrigin += 1
+          gameState.scoreTimer = gameState.scoreTimer * 1.1 
+          this.scene.start("missileLevel")
         }
 
     }
