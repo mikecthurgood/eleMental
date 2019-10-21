@@ -5,9 +5,7 @@ class FireLevel extends Phaser.Scene {
     }
 
     preload() {
-        this.textures.remove('background');
         this.load.image('background', 'assets/background.png');
-        // this.load.image('background2', 'assets/background green.png')
         this.load.image('face', 'assets/scared-face.png');
         this.load.image('fire', 'assets/fireball.png')
 
