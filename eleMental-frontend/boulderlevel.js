@@ -5,6 +5,7 @@ class BoulderLevel extends Phaser.Scene {
     }
 
     preload() {
+        this.textures.remove('background');
         this.load.image('background', 'assets/background green.png');
         this.load.image('face', 'assets/scared-face.png');
         this.load.image('boulder', 'assets/boulder.png')
