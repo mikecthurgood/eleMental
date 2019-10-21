@@ -6,13 +6,17 @@ class FireLevel extends Phaser.Scene {
 
     preload() {
         this.load.image('background', 'assets/background.png');
+        this.load.image('background2', 'assets/background green.png')
         this.load.image('face', 'assets/scared-face.png');
-        this.load.image('fire', 'assets/firebolt.png')
-        this.load.image('fire2', 'assets/firebolt2.png')
+        this.load.image('fire', 'assets/fireball.png')
+
         
     }
 
     create() {
+
+        gameState.time = gameState.timeOrigin
+
 
         let shapes = this.cache.json.get('shapes');
 
@@ -28,43 +32,52 @@ class FireLevel extends Phaser.Scene {
         }
 
         function fireGen () {
+          if (currentlyPlaying === true) {
             const yCoord = randomLocation(250, 1000)
             const velocity = Math.random() * 500
-            projectiles.fire = fireBolts.create(-50, yCoord,'fire');
+            projectiles.fire = fireBolts.create(-50, yCoord,'fire').setScale(.1);
             projectiles.fire.body.setAllowGravity(false);
             projectiles.fire.setVelocityX(velocity)
             projectiles.fire.setVelocityY(velocity/2)
-            projectiles.fire.body.setSize(70, 2, true)
+            projectiles.fire.body.setCircle(300, 125, 125)
+      }
           }
 
           function fireGen2 () {
+            if (currentlyPlaying === true) {
             const yCoord = randomLocation(250, 1000)
             const velocity = Math.random() * 500
-            projectiles.fire = fireBolts.create(-50, yCoord,'fire');
+            projectiles.fire = fireBolts.create(-50, yCoord,'fire').setScale(.1);
             projectiles.fire.body.setAllowGravity(false);
             projectiles.fire.setVelocityX(velocity)
             projectiles.fire.setVelocityY(-velocity/2)
-            projectiles.fire.body.setSize(70, 2, true)
+            projectiles.fire.body.setCircle(300, 125, 125)
+      }
           }
 
           function fireGen3 () {
+            if (currentlyPlaying === true) {
             const yCoord = randomLocation(250, 1000)
             const velocity = Math.random() * 500
-            projectiles.fire = fireBolts.create(1250, yCoord,'fire2');
+            projectiles.fire = fireBolts.create(1250, yCoord,'fire').setScale(.1);
             projectiles.fire.body.setAllowGravity(false);
             projectiles.fire.setVelocityX(-velocity)
             projectiles.fire.setVelocityY(-velocity/2)
-            projectiles.fire.body.setSize(70, 2, true).setOffset(0, 8)
+            projectiles.fire.body.setCircle(300, 125, 125)
+
+            }
           }
 
           function fireGen4 () {
+            if (currentlyPlaying === true) {
             const yCoord = randomLocation(250, 1000)
             const velocity = Math.random() * 500
-            projectiles.fire = fireBolts.create(1250, yCoord,'fire2');
+            projectiles.fire = fireBolts.create(1250, yCoord,'fire').setScale(.1);
             projectiles.fire.body.setAllowGravity(false);
             projectiles.fire.setVelocityX(-velocity)
             projectiles.fire.setVelocityY(velocity/2)
-            projectiles.fire.body.setSize(70, 2, true).setOffset(0, 8)
+            projectiles.fire.body.setCircle(300, 125, 125)
+            }
           }
 
           function gameOver() {
@@ -72,28 +85,28 @@ class FireLevel extends Phaser.Scene {
           }
 
           const fireGenLoop = this.time.addEvent({
-            delay: 300,
+            delay: gameState.fireDelay,
             callback: fireGen,
             callbackScope: this,
             loop: true,
           });
 
           const fireGenLoop2 = this.time.addEvent({
-            delay: 300,
+            delay: gameState.fireDelay,
             callback: fireGen2,
             callbackScope: this,
             loop: true,
           });
 
           const fireGenLoop3 = this.time.addEvent({
-            delay: 300,
+            delay: gameState.fireDelay,
             callback: fireGen3,
             callbackScope: this,
             loop: true,
           });
 
           const fireGenLoop4 = this.time.addEvent({
-            delay: 300,
+            delay: gameState.fireDelay,
             callback: fireGen4,
             callbackScope: this,
             loop: true,
@@ -106,8 +119,24 @@ class FireLevel extends Phaser.Scene {
             callbackScope: this,
             loop: true,
           });
+
+          const timerLoop = this.time.addEvent({
+            delay: 1000,
+            callback: decreaseTimer,
+            callbackScope: this,
+            loop: true,
+          });
+          
           
 
+          gameState.timerText = this.add.text(500, 200, `${gameState.time}`, { fontSize: '400px', fill: '#ffffff' })
+
+          function decreaseTimer() {
+            if (currentlyPlaying === true) {
+            gameState.time -= 1
+            gameState.timerText.setText(`${gameState.time}`)
+            }
+          }
           function increaseScore() {
             if (currentlyPlaying === true) {
             gameState.score += 10;
@@ -155,7 +184,9 @@ class FireLevel extends Phaser.Scene {
             else null
         }
 
-        if (gameState.score > 50) {
+        if (gameState.time === 0) {
+          gameState.fireDelay = gameState.fireDelay * 0.8
+          gameState.timeOrigin += 3
           this.scene.start("boulderLevel")
         }
 

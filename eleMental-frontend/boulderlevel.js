@@ -13,6 +13,8 @@ class BoulderLevel extends Phaser.Scene {
 
     create() {
 
+      gameState.time = gameState.timeOrigin
+
 
         this.background = this.add.image(600,400,'background');
 
@@ -26,6 +28,7 @@ class BoulderLevel extends Phaser.Scene {
         }
 
         function boulderGen () {
+          if (currentlyPlaying === true) {
             const xCoord = randomLocation(100, 1100)
             const velocity = Math.random() * 500
             const bounce = Math.random()
@@ -34,6 +37,7 @@ class BoulderLevel extends Phaser.Scene {
             projectiles.boulder.body.collideWorldBounds = true;
             projectiles.boulder.body.setCircle(100, 10, 10)
             projectiles.boulder.body.bounce.y = bounce;
+          }
           }
 
         //   function boulderGen2 () {
@@ -55,6 +59,7 @@ class BoulderLevel extends Phaser.Scene {
         //   }
 
           function boulderGen4 () {
+            if (currentlyPlaying === true) {
             const xCoord = randomLocation(100, 1100)
             const velocity = Math.random() * 500
             const bounce = Math.random()
@@ -63,7 +68,7 @@ class BoulderLevel extends Phaser.Scene {
             projectiles.boulder.body.collideWorldBounds = true;
             projectiles.boulder.body.bounce.y = bounce;
             projectiles.boulder.body.setCircle(100, 10, 10)
-
+            }
             // projectiles.boulder.setVelocityX(-velocity)
           }
 
@@ -72,7 +77,7 @@ class BoulderLevel extends Phaser.Scene {
           }
 
           const boulderGenLoop = this.time.addEvent({
-            delay: 500,
+            delay: gameState.boulderDelay,
             callback: boulderGen,
             callbackScope: this,
             loop: true,
@@ -93,7 +98,7 @@ class BoulderLevel extends Phaser.Scene {
         //   });
 
           const boulderGenLoop4 = this.time.addEvent({
-            delay: 500,
+            delay: gameState.boulderDelay,
             callback: boulderGen4,
             callbackScope: this,
             loop: true,
@@ -113,6 +118,22 @@ class BoulderLevel extends Phaser.Scene {
             if (currentlyPlaying === true) {
             gameState.score += 10;
             gameState.scoreText.setText(`Score: ${gameState.score}`)
+            }
+          }
+
+          const timerLoop = this.time.addEvent({
+            delay: 1000,
+            callback: decreaseTimer,
+            callbackScope: this,
+            loop: true,
+          });
+          
+          gameState.timerText = this.add.text(500, 200, `${gameState.time}`, { fontSize: '400px', fill: '#ffffff' })
+
+          function decreaseTimer() {
+            if (currentlyPlaying === true) {
+            gameState.time -= 1
+            gameState.timerText.setText(`${gameState.time}`)
             }
           }
 
@@ -156,6 +177,12 @@ class BoulderLevel extends Phaser.Scene {
             if (gameState.smiley.y < 710) gameState.smiley.y+=5
             else if (gameState.smiley.x > 590 && gameState.smiley.x < 610) gameState.smiley.y+=5 
             else null
+        }
+
+        if (gameState.time === 0) {
+          gameState.boulderDelay = gameState.boulderDelay * 0.8
+          gameState.timeOrigin += 3
+          this.scene.start("fireLevel")
         }
 
     }
