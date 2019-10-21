@@ -32,6 +32,7 @@ class BoulderLevel extends Phaser.Scene {
             projectiles.boulder = boulders.create(xCoord, 0,'boulder');
             projectiles.boulder.setScale(.4)
             projectiles.boulder.body.collideWorldBounds = true;
+            projectiles.boulder.body.setCircle(100, 10, 10)
             projectiles.boulder.body.bounce.y = bounce;
           }
 
@@ -61,6 +62,8 @@ class BoulderLevel extends Phaser.Scene {
             projectiles.boulder.setScale(.4)
             projectiles.boulder.body.collideWorldBounds = true;
             projectiles.boulder.body.bounce.y = bounce;
+            projectiles.boulder.body.setCircle(100, 10, 10)
+
             // projectiles.boulder.setVelocityX(-velocity)
           }
 
@@ -107,22 +110,27 @@ class BoulderLevel extends Phaser.Scene {
           
 
           function increaseScore() {
+            if (currentlyPlaying === true) {
             gameState.score += 10;
             gameState.scoreText.setText(`Score: ${gameState.score}`)
+            }
           }
 
         
         gameState.smiley = this.physics.add.sprite(600,745,'face').setScale(.8);
         gameState.smiley.body.setAllowGravity(false)
+        gameState.smiley.body.setCircle(35, 2, 2)
+
 
         this.cursors = this.input.keyboard.createCursorKeys()
 
-        this.physics.add.collider(gameState.smiley, boulders, (bolt) => {
-            this.add.text(400, 400, 'Game Over', { fontSize: '80px', fill: '#ff0000' });
-            bolt.destroy();
-            this.physics.pause();
-            this.scoreLoop.pause;
-        })
+        this.physics.add.collider(gameState.smiley, boulders, (rock) => {
+          this.add.text(400, 400, `Game Over`, { fontSize: '80px', fill: '#ff0000' });
+          this.add.text(380, 500, `You scored ${gameState.score} points`, { fontSize: '40px', fill: '#ff0000' });
+          rock.destroy();
+          this.physics.pause();
+          currentlyPlaying = false
+      })
     }
 
     update(delta) {

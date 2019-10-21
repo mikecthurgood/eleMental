@@ -6,7 +6,8 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: {y : 400},
-            enableBody: true
+            enableBody: true,
+            debug: true
         }
     },
     scene: [Menu, FireLevel, BoulderLevel]
@@ -17,4 +18,5 @@ const gameState = {}
 const projectiles = {}
 
 gameState.score = 0
+let currentlyPlaying = true
 // let fireGroup

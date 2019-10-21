@@ -9,11 +9,12 @@ class FireLevel extends Phaser.Scene {
         this.load.image('face', 'assets/scared-face.png');
         this.load.image('fire', 'assets/firebolt.png')
         this.load.image('fire2', 'assets/firebolt2.png')
-
+        
     }
 
     create() {
 
+        let shapes = this.cache.json.get('shapes');
 
         this.background = this.add.image(600,400,'background');
 
@@ -33,6 +34,7 @@ class FireLevel extends Phaser.Scene {
             projectiles.fire.body.setAllowGravity(false);
             projectiles.fire.setVelocityX(velocity)
             projectiles.fire.setVelocityY(velocity/2)
+            projectiles.fire.body.setSize(70, 2, true)
           }
 
           function fireGen2 () {
@@ -42,6 +44,7 @@ class FireLevel extends Phaser.Scene {
             projectiles.fire.body.setAllowGravity(false);
             projectiles.fire.setVelocityX(velocity)
             projectiles.fire.setVelocityY(-velocity/2)
+            projectiles.fire.body.setSize(70, 2, true)
           }
 
           function fireGen3 () {
@@ -51,6 +54,7 @@ class FireLevel extends Phaser.Scene {
             projectiles.fire.body.setAllowGravity(false);
             projectiles.fire.setVelocityX(-velocity)
             projectiles.fire.setVelocityY(-velocity/2)
+            projectiles.fire.body.setSize(70, 2, true).setOffset(0, 8)
           }
 
           function fireGen4 () {
@@ -60,6 +64,7 @@ class FireLevel extends Phaser.Scene {
             projectiles.fire.body.setAllowGravity(false);
             projectiles.fire.setVelocityX(-velocity)
             projectiles.fire.setVelocityY(velocity/2)
+            projectiles.fire.body.setSize(70, 2, true).setOffset(0, 8)
           }
 
           function gameOver() {
@@ -104,21 +109,24 @@ class FireLevel extends Phaser.Scene {
           
 
           function increaseScore() {
+            if (currentlyPlaying === true) {
             gameState.score += 10;
             gameState.scoreText.setText(`Score: ${gameState.score}`)
+            }
           }
-
-        
+ 
         gameState.smiley = this.physics.add.sprite(600,745,'face').setScale(.8);
         gameState.smiley.body.setAllowGravity(false);
+        gameState.smiley.body.setCircle(35, 2, 2)
 
         this.cursors = this.input.keyboard.createCursorKeys()
 
         this.physics.add.collider(gameState.smiley, fireBolts, (bolt) => {
-            this.add.text(400, 400, 'Game Over', { fontSize: '80px', fill: '#ff0000' });
+            this.add.text(400, 400, `Game Over`, { fontSize: '80px', fill: '#ff0000' });
+            this.add.text(380, 500, `You scored ${gameState.score} points`, { fontSize: '40px', fill: '#ff0000' });
             bolt.destroy();
             this.physics.pause();
-            this.scoreLoop.pause;
+            currentlyPlaying = false
         })
     }
 
@@ -145,6 +153,10 @@ class FireLevel extends Phaser.Scene {
             if (gameState.smiley.y < 710) gameState.smiley.y+=5
             else if (gameState.smiley.x > 590 && gameState.smiley.x < 610) gameState.smiley.y+=5 
             else null
+        }
+
+        if (gameState.score > 50) {
+          this.scene.start("boulderLevel")
         }
 
     }
