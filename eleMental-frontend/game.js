@@ -13,7 +13,7 @@ const config = {
     scene: [Menu, FireLevel, BoulderLevel]
 };
 
-const game = new Phaser.Game(config);
+const game = new Phaser.Game(config);2
 const gameState = {}
 const projectiles = {}
 

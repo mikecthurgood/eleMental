@@ -26,6 +26,7 @@ class BoulderLevel extends Phaser.Scene {
         }
 
         function boulderGen () {
+          if (currentlyPlaying === true) {
             const xCoord = randomLocation(100, 1100)
             const velocity = Math.random() * 500
             const bounce = Math.random()
@@ -34,6 +35,7 @@ class BoulderLevel extends Phaser.Scene {
             projectiles.boulder.body.collideWorldBounds = true;
             projectiles.boulder.body.setCircle(100, 10, 10)
             projectiles.boulder.body.bounce.y = bounce;
+          }
           }
 
         //   function boulderGen2 () {
@@ -55,6 +57,7 @@ class BoulderLevel extends Phaser.Scene {
         //   }
 
           function boulderGen4 () {
+            if (currentlyPlaying === true) {
             const xCoord = randomLocation(100, 1100)
             const velocity = Math.random() * 500
             const bounce = Math.random()
@@ -63,7 +66,7 @@ class BoulderLevel extends Phaser.Scene {
             projectiles.boulder.body.collideWorldBounds = true;
             projectiles.boulder.body.bounce.y = bounce;
             projectiles.boulder.body.setCircle(100, 10, 10)
-
+            }
             // projectiles.boulder.setVelocityX(-velocity)
           }
 
