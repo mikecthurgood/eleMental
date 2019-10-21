@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    min-height: 100vh;
+    display: flex;
+  }
+  ​
+  canvas {
+    display: block;
+    width: 100vh; /* height:width ratio = 9/5  */
+    height: 100vh; /* height:width ratio = 9/5  */
+    background: #fffcf2;
+    max-height: 180vw; /* 5/9 */
+    max-width: 100%; /* 5/9 */
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0; /* vertical center */
+    left: 0;
+    right: 0; /* horizontal center */
+  }
