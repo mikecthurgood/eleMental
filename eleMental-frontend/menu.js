@@ -11,14 +11,23 @@ class Menu extends Phaser.Scene {
 
         gameState.score = 0
         gameState.time = 0
-        gameState.fireDelay = 500
-        gameState.boulderDelay = 700
-        gameState.speed = 250
         gameState.scoreTimer = 1000
+        gameState.timeOrigin = 7
+        gameState.fireDelay = 700
+        gameState.boulderDelay = 400
+        gameState.positionX = 600
+        gameState.positionY = 745
+        gameState.speed = 225
+        gameState.scoreTimer = 1000
+        gameState.movementSpeed = 6
+        currentlyPlaying = true
         
         this.image = this.add.image(600,400,'eleMental');
 
         this.input.keyboard.on('keyup', function (e) {
+            if(e.key === "1") {
+                this.scene.start("getReady");
+            }
             if(e.key === "2") {
                 this.scene.start("fireLevel");
             }

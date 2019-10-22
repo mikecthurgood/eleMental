@@ -7,25 +7,27 @@ class BoulderLevel extends Phaser.Scene {
     preload() {
         // this.textures.remove('background');
         this.load.image('background-green', 'assets/background green.png');
-        this.load.image('face', 'assets/scared-face.png');
-        this.load.image('boulder', 'assets/boulder.png')
+        // this.load.image('face', 'assets/scared-face.png');
+        this.load.image('boulder', 'assets/boulder.png');
+        this.load.image('explode', 'assets/muzzleflash3.png');
+        this.load.image('smoke', 'assets/smoke-puff.png');
+        this.load.spritesheet('nerd', 'assets/nerdspritesheet.png', {frameWidth: 67.3, frameHeight: 91.5 })
+
 
     }
 
     create() {
 
-      gameState.time = gameState.timeOrigin
+        gameState.time = gameState.timeOrigin
+
+        gameState.nextLevel = gameState.level.sample()
 
         this.background = this.add.image(600,400,'background-green');
 
-        gameState.scoreText = this.add.text(100, 750, 'Score: 0', { fontSize: '40px', fill: '#ffffff' })
+        gameState.scoreText = this.add.text(100, 750, `1Score: ${gameState.score}`, { fontSize: '40px', fill: '#ffffff' })
 
         
         const boulders = this.physics.add.group()
-
-        function randomLocation(min, max) {
-            return Math.random() * (max - min) + min;
-        }
 
         function boulderGen () {
           if (currentlyPlaying === true) {
@@ -40,37 +42,6 @@ class BoulderLevel extends Phaser.Scene {
           }
           }
 
-        //   function boulderGen2 () {
-        //     const yCoord = randomLocation(250, 1000)
-        //     const velocity = Math.random() * 500
-        //     projectiles.boulder = boulders.create(-50, yCoord,'boulder');
-        //     projectiles.boulder.setScale(.4)
-        //     projectiles.boulder.setVelocityX(velocity)
-        //     projectiles.boulder.setVelocityY(-velocity/2)
-        //   }
-
-        //   function boulderGen3 () {
-        //     const yCoord = randomLocation(250, 1000)
-        //     const velocity = Math.random() * 500
-        //     projectiles.boulder = boulders.create(1250, yCoord,'boulder');
-        //     projectiles.boulder.setScale(.4)
-        //     projectiles.boulder.setVelocityX(-velocity)
-        //     projectiles.boulder.setVelocityY(-velocity/2)
-        //   }
-
-          function boulderGen4 () {
-            if (currentlyPlaying === true) {
-            const xCoord = randomLocation(100, 1100)
-            const velocity = Math.random() * 500
-            const bounce = Math.random()
-            projectiles.boulder = boulders.create(xCoord, 0,'boulder');
-            projectiles.boulder.setScale(.4)
-            projectiles.boulder.body.collideWorldBounds = true;
-            projectiles.boulder.body.bounce.y = bounce;
-            projectiles.boulder.body.setCircle(100, 10, 10)
-            }
-            // projectiles.boulder.setVelocityX(-velocity)
-          }
 
           function gameOver() {
               global.add.text(400, 600, 'GAME OVER!', { fontSize: '60px', color: '#ff0000' })
@@ -83,26 +54,7 @@ class BoulderLevel extends Phaser.Scene {
             loop: true,
           });
 
-        //   const boulderGenLoop2 = this.time.addEvent({
-        //     delay: 300,
-        //     callback: boulderGen2,
-        //     callbackScope: this,
-        //     loop: true,
-        //   });
-
-        //   const boulderGenLoop3 = this.time.addEvent({
-        //     delay: 300,
-        //     callback: boulderGen3,
-        //     callbackScope: this,
-        //     loop: true,
-        //   });
-
-          const boulderGenLoop4 = this.time.addEvent({
-            delay: gameState.boulderDelay,
-            callback: boulderGen4,
-            callbackScope: this,
-            loop: true,
-          });
+       
 
 
           const scoreLoop = this.time.addEvent({
@@ -138,52 +90,114 @@ class BoulderLevel extends Phaser.Scene {
           }
 
         
-        gameState.smiley = this.physics.add.sprite(600,745,'face').setScale(.8);
+        gameState.smiley = this.physics.add.sprite(gameState.positionX,gameState.positionY,'nerd').setScale(.8);
         gameState.smiley.body.setAllowGravity(false)
         gameState.smiley.body.setCircle(35, 2, 2)
 
 
         this.cursors = this.input.keyboard.createCursorKeys()
 
-        this.physics.add.collider(gameState.smiley, boulders, (rock) => {
-          this.add.text(400, 400, `Game Over`, { fontSize: '80px', fill: '#ff0000' });
-          this.add.text(380, 500, `You scored ${gameState.score} points`, { fontSize: '40px', fill: '#ff0000' });
-          rock.destroy();
-          this.physics.pause();
+        this.anims.create({
+          key: 'up',
+          frames: this.anims.generateFrameNumbers('nerd', { start: 0, end: 2 }),
+          frameRate: 15,
+          repeat: -1
+        });
+    
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('nerd', { start: 3, end: 5 }),
+            frameRate: 15,
+            repeat: -1
+        });
+
+        this.anims.create({
+          key: 'down',
+          frames: this.anims.generateFrameNumbers('nerd', { start: 6, end: 8 }),
+          frameRate: 15,
+          repeat: -1
+        });
+
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('nerd', { start: 9, end: 11 }),
+            frameRate: 15,
+            repeat: -1
+        });
+
+        gameState.rt = this.make.renderTexture({ x: 0, y: 0, width: 800, height: 600 }).setOrigin(0, 0);
+
+        gameState.blast = this.add.follower(null, -150, -350, 'smoke');
+    
+        gameState.nuke = this.tweens.add({
+            targets: gameState.blast,
+            scaleX: 8,
+            scaleY: 8,
+            alpha: 0,
+            duration: 1000,
+            ease: "Bounce.easeIn",
+            onComplete: function () { gameState.rt.clear(); gameState.blast.alpha = 0 },
+            paused: true
+        });
+    
+        gameState.nuke.setCallback('onUpdate', draw, [], this);
+    
+        this.physics.add.overlap(boulders, gameState.smiley, () => {
           currentlyPlaying = false
-      })
+          generate(gameState.smiley.x, gameState.smiley.y)
+          gameState.smiley.destroy();
+          const gameOverTimer = this.time.addEvent({
+            delay: 1300,
+            callback: gameOver,
+            callbackScope: this,
+            loop: false,
+          });
+        })
+
+        function gameOver() {
+          this.scene.start('gameOver')
+        }
+
     }
 
     update(delta) {
 
-        if(this.cursors.left.isDown) {
-            if (gameState.smiley.x > 90 && (gameState.smiley.y < 715 && gameState.smiley.y > 85)) gameState.smiley.x-=5
-            else if (gameState.smiley.y > 390 && gameState.smiley.y < 410) gameState.smiley.x-=5
-            else null
-        }
-        if(this.cursors.right.isDown) {
-            if (gameState.smiley.x < 1110 && (gameState.smiley.y < 715 && gameState.smiley.y > 85)) gameState.smiley.x+=5
-            else if (gameState.smiley.y > 390 && gameState.smiley.y < 410) gameState.smiley.x+=5 
-            else null
-        }
-
-        if(this.cursors.up.isDown) {
-            if (gameState.smiley.y > 90) gameState.smiley.y-=5
-            else if (gameState.smiley.x > 590 && gameState.smiley.x < 610) gameState.smiley.y-=5 
-            else null
-        }
-
-        if(this.cursors.down.isDown) {
-            if (gameState.smiley.y < 710) gameState.smiley.y+=5
-            else if (gameState.smiley.x > 590 && gameState.smiley.x < 610) gameState.smiley.y+=5 
-            else null
-        }
+    if (currentlyPlaying === true) {
+    if(this.cursors.left.isDown) {
+        gameState.smiley.anims.play('left', true);
+        if (gameState.smiley.x > 90 && (gameState.smiley.y < 715 && gameState.smiley.y > 85)) gameState.smiley.x-=gameState.movementSpeed
+        else if (gameState.smiley.y > 390 && gameState.smiley.y < 410) gameState.smiley.x-=gameState.movementSpeed
+        else null
+    } else if(this.cursors.right.isDown) {
+      gameState.smiley.anims.play('right', true);
+        if (gameState.smiley.x < 1110 && (gameState.smiley.y < 715 && gameState.smiley.y > 85)) gameState.smiley.x+=gameState.movementSpeed
+        else if (gameState.smiley.y > 390 && gameState.smiley.y < 410) gameState.smiley.x+=gameState.movementSpeed
+        else null
+    } else if(this.cursors.up.isDown) {
+      gameState.smiley.anims.play('up', true);
+        if (gameState.smiley.y > 90) gameState.smiley.y-=gameState.movementSpeed
+        else if (gameState.smiley.x > 590 && gameState.smiley.x < 610) gameState.smiley.y-=gameState.movementSpeed
+        else null
+    } else if(this.cursors.down.isDown) {
+      gameState.smiley.anims.play('down', true);
+        if (gameState.smiley.y < 710) gameState.smiley.y+=gameState.movementSpeed
+        else if (gameState.smiley.x > 590 && gameState.smiley.x < 610) gameState.smiley.y+=gameState.movementSpeed 
+        else null
+    } else {
+      gameState.smiley.anims.play('turn');
+    }
+  }
 
         if (gameState.time === 0) {
+          gameState.positionX = gameState.smiley.x
+          gameState.positionY = gameState.smiley.y
           gameState.boulderDelay = gameState.boulderDelay * 0.8
           gameState.timeOrigin += 1
-          gameState.scoreTimer = gameState.scoreTimer * 1.1 
-          this.scene.start("missileLevel")
+          gameState.scoreTimer = gameState.scoreTimer * 1.1
+          gameState.movementSpeed++
+          gameState.speed = gameState.speed + 25
+
+          this.scene.start(gameState.nextLevel)
         }
 
     }

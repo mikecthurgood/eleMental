@@ -5,10 +5,10 @@ body {
     min-height: 100vh;
     display: flex;
   }
-  ​
-  canvas {
+
+canvas {
     display: block;
-    width: 100vh; /* height:width ratio = 9/5  */
+    width: 100vw; /* height:width ratio = 9/5  */
     height: 100vh; /* height:width ratio = 9/5  */
     background: #fffcf2;
     max-height: 180vw; /* 5/9 */
