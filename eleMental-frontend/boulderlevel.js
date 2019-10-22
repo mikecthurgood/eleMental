@@ -13,7 +13,6 @@ class BoulderLevel extends Phaser.Scene {
         this.load.image('smoke', 'assets/smoke-puff.png');
         this.load.spritesheet('nerd', 'assets/nerdspritesheet.png', {frameWidth: 67.3, frameHeight: 91.5 })
 
-
     }
 
     create() {

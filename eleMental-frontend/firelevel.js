@@ -5,9 +5,11 @@ class FireLevel extends Phaser.Scene {
     }
 
     preload() {
+
         // this.load.crossOrigin = 'anonymous';
         this.load.image('background', 'assets/background.png');
         // this.load.image('face', 'assets/scared-face.png');
+
         this.load.image('fire', 'assets/fireball.png')
         this.load.image('explode', 'assets/muzzleflash3.png');
         this.load.image('smoke', 'assets/smoke-puff.png');
