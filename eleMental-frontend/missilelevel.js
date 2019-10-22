@@ -1,59 +1,48 @@
-class BoulderLevel extends Phaser.Scene {
+class MissileLevel extends Phaser.Scene {
 
     constructor() {
-        super({key:'boulderLevel'});
+        super({key:'missileLevel'});
     }
 
     preload() {
-        // this.textures.remove('background');
-        this.load.image('background-green', 'assets/background green.png');
+        this.load.image('background-red', 'assets/background red.png');
         // this.load.image('face', 'assets/scared-face.png');
-        this.load.image('boulder', 'assets/boulder.png');
+        this.load.image('missile', 'assets/missile.png');
         this.load.image('explode', 'assets/muzzleflash3.png');
         this.load.image('smoke', 'assets/smoke-puff.png');
         this.load.spritesheet('nerd', 'assets/nerdspritesheet.png', {frameWidth: 67.3, frameHeight: 91.5 })
 
+
     }
+
 
     create() {
 
+        projectiles.missiles = []   
+        gameState.nextLevel = gameState.level.sample()
         gameState.time = gameState.timeOrigin
 
-        gameState.nextLevel = gameState.level.sample()
 
-        this.background = this.add.image(600,400,'background-green');
-
-        gameState.scoreText = this.add.text(100, 750, `1Score: ${gameState.score}`, { fontSize: '40px', fill: '#ffffff' })
-
-        
-        const boulders = this.physics.add.group()
-
-        function boulderGen () {
-          if (currentlyPlaying === true) {
-            const xCoord = randomLocation(100, 1100)
-            // const velocity = Math.random() * 500
-            const bounce = Math.random()
-            projectiles.boulder = boulders.create(xCoord, 0,'boulder');
-            projectiles.boulder.setScale(.4)
-            projectiles.boulder.body.collideWorldBounds = true;
-            projectiles.boulder.body.setCircle(100, 10, 10)
-            projectiles.boulder.body.bounce.y = bounce;
-          }
-          }
-
-
-          function gameOver() {
-              global.add.text(400, 600, 'GAME OVER!', { fontSize: '60px', color: '#ff0000' })
-          }
-
-          const boulderGenLoop = this.time.addEvent({
-            delay: gameState.boulderDelay,
-            callback: boulderGen,
-            callbackScope: this,
-            loop: true,
-          });
-
+        this.background = this.add.image(600,400,'background-red');
        
+        gameState.timerText = this.add.text(500, 200, `${gameState.time}`, { fontSize: '400px', fill: '#ffffff' })
+
+        function decreaseTimer() {
+          if (currentlyPlaying === true) {
+          gameState.time -= 1
+          gameState.timerText.setText(`${gameState.time}`)
+          }
+        }  
+       
+        gameState.scoreText = this.add.text(100, 750, 'Score: 0', { fontSize: '40px', fill: '#ffffff' })
+        
+        const missiles = this.physics.add.group()
+
+        projectiles.missile = missiles.create(100, 100, 'missile')
+            .setVelocity(gameState.speed, 0);
+            projectiles.missile.setScale(.6)
+            projectiles.missile.body.setAllowGravity(false)
+            projectiles.missiles.push(projectiles.missile)
 
 
           const scoreLoop = this.time.addEvent({
@@ -78,23 +67,14 @@ class BoulderLevel extends Phaser.Scene {
             callbackScope: this,
             loop: true,
           });
-          
-          gameState.timerText = this.add.text(500, 200, `${gameState.time}`, { fontSize: '400px', fill: '#ffffff' })
 
-          function decreaseTimer() {
-            if (currentlyPlaying === true) {
-            gameState.time -= 1
-            gameState.timerText.setText(`${gameState.time}`)
-            }
-          }
-
-        
         gameState.smiley = this.physics.add.sprite(gameState.positionX,gameState.positionY,'nerd').setScale(.8);
         gameState.smiley.body.setAllowGravity(false)
         gameState.smiley.body.setCircle(35, 2, 2)
 
 
         this.cursors = this.input.keyboard.createCursorKeys()
+
 
         this.anims.create({
           key: 'up',
@@ -141,10 +121,11 @@ class BoulderLevel extends Phaser.Scene {
     
         gameState.nuke.setCallback('onUpdate', draw, [], this);
     
-        this.physics.add.overlap(boulders, gameState.smiley, () => {
+        this.physics.add.overlap(gameState.smiley, missiles, (missile) => {
           currentlyPlaying = false
           generate(gameState.smiley.x, gameState.smiley.y)
           gameState.smiley.destroy();
+          projectiles.missile.destroy();
           const gameOverTimer = this.time.addEvent({
             delay: 1300,
             callback: gameOver,
@@ -157,11 +138,19 @@ class BoulderLevel extends Phaser.Scene {
           this.scene.start('gameOver')
         }
 
+
+      //   this.physics.add.collider(gameState.smiley, projectiles.missile, (rocket) => {
+      //       currentlyPlaying = false
+      //       this.scene.start('gameOver')
+      // })
+
+
+    
     }
 
     update(delta) {
 
-    if (currentlyPlaying === true) {
+       if (currentlyPlaying === true) {
     if(this.cursors.left.isDown) {
         gameState.smiley.anims.play('left', true);
         if (gameState.smiley.x > 90 && (gameState.smiley.y < 715 && gameState.smiley.y > 85)) gameState.smiley.x-=gameState.movementSpeed
@@ -186,18 +175,27 @@ class BoulderLevel extends Phaser.Scene {
       gameState.smiley.anims.play('turn');
     }
   }
+        if (currentlyPlaying === true) {
+
+          smileyMove(gameState.smiley);
+          velocityFromRotation(projectiles.missile.rotation, gameState.speed, projectiles.missile.body.velocity);
+          projectiles.missile.body.debugBodyColor = (projectiles.missile.body.angularVelocity === 0) ? 0xff0000 : 0xffff00;
+        }
+        
 
         if (gameState.time === 0) {
-          gameState.positionX = gameState.smiley.x
-          gameState.positionY = gameState.smiley.y
-          gameState.boulderDelay = gameState.boulderDelay * 0.8
-          gameState.timeOrigin += 1
-          gameState.scoreTimer = gameState.scoreTimer * 1.1
-          gameState.movementSpeed++
-          gameState.speed = gameState.speed + 25
+            gameState.positionX = gameState.smiley.x
+            gameState.positionY = gameState.smiley.y
+            gameState.speed = gameState.speed + 25
+            gameState.timeOrigin += 1
+            gameState.scoreTimer = gameState.scoreTimer * 1.1
+            gameState.movementSpeed++
 
-          this.scene.start(gameState.nextLevel)
+            this.scene.start(gameState.nextLevel)
         }
 
+        
+
     }
+
 }
