@@ -7,9 +7,12 @@ class IceLevel extends Phaser.Scene {
     preload() {
 
         // this.load.crossOrigin = 'anonymous';
-        this.load.image('background-blue', 'assets/background.png');
+        this.load.image('background-snow', 'assets/background snow.png');
         // this.load.image('face', 'assets/scared-face.png');
-        this.load.image('spike', 'assets/icespikes.png')
+        this.load.image('spike-left', 'assets/ice spikes left wall.png')
+        this.load.image('spike-right', 'assets/ice spikes right wall.png')
+        this.load.image('spike-bottom', 'assets/spike wall up.png')
+        this.load.image('spike-top', 'assets/spike wall.png')
 
         this.load.image('snowball-left', 'assets/snowball left.png')
         this.load.image('snowball-right', 'assets/snowball right.png')
@@ -26,18 +29,22 @@ class IceLevel extends Phaser.Scene {
 
         gameState.time = gameState.timeOrigin
 
-        this.background = this.add.image(600,400,'background-blue');
-        gameState.iceSpikes = this.physics.add.sprite(100, 750, 'spike').setScale(0.8)
-        gameState.iceSpikes.body.setAllowGravity(false)
-        
+        this.background = this.add.image(600,400,'background-snow');
+        gameState.iceWallBottom = iceSpikes.create(600, 850, 'spike-bottom').body.setAllowGravity(false)
+        gameState.iceWallLeft = iceSpikes.create(-50, 400, 'spike-left').body.setAllowGravity(false)
+        gameState.iceWallRight = iceSpikes.create(1250, 400, 'spike-right').body.setAllowGravity(false)
+        gameState.iceWallTop = iceSpikes.create(600, -50, 'spike-top').body.setAllowGravity(false)
 
+        
+        // gameState.iceSpikes.body.setAllowGravity5(false)
+       
         gameState.scoreText = this.add.text(100, 750, `Score: ${gameState.score}`, { fontSize: '40px', fill: '#ffffff' })
 
         gameState.nextLevel = gameState.level.sample()
 
-        gameState.smiley = this.physics.add.sprite(gameState.positionX,gameState.positionY,'nerd').setScale(.8);
-        gameState.smiley.body.setAllowGravity(false);
-        gameState.smiley.body.setCircle(35, 2, 2)
+        // gameState.smiley = this.physics.add.sprite(gameState.positionX,gameState.positionY,'nerd').setScale(.8);
+        // gameState.smiley.body.setAllowGravity(false);
+        // gameState.smiley.body.setCircle(35, 2, 2)
 
       
 
@@ -157,9 +164,9 @@ class IceLevel extends Phaser.Scene {
             }
           }
  
-        gameState.smiley = this.physics.add.sprite(gameState.positionX,gameState.positionY,'nerd').setScale(.8);
+        gameState.smiley = this.physics.add.sprite(gameState.positionX, gameState.positionY,'nerd').setScale(.8);
         gameState.smiley.body.setAllowGravity(false);
-        gameState.smiley.body.setCircle(35, 2, 2)
+        gameState.smiley.body.setSize(30, 40)
 
         this.cursors = this.input.keyboard.createCursorKeys()
 
@@ -209,20 +216,29 @@ class IceLevel extends Phaser.Scene {
     
         gameState.nuke.setCallback('onUpdate', draw, [], this);
     
-        // this.physics.add.overlap(snowBalls, gameState.smiley, () => {
-        //   currentlyPlaying = false
-        //   generate(gameState.smiley.x, gameState.smiley.y)
-        //   gameState.smiley.destroy();
-        //   // projectiles.fireBalls.forEach(fireBall => {
-        //   //   generate(fireBall.x, fireBall.y)
-        //   // })
-        //   const gameOverTimer = this.time.addEvent({
-        //     delay: 1300,
-        //     callback: gameOver,
-        //     callbackScope: this,
-        //     loop: false,
-        //   });
-        // })
+        this.physics.add.overlap(snowBalls, gameState.smiley, () => {
+          currentlyPlaying = false
+          gameState.smiley.body.setAllowGravity(true)
+         
+          const gameOverTimer = this.time.addEvent({
+            delay: 1300,
+            callback: gameOver,
+            callbackScope: this,
+            loop: false,
+          });
+        })
+
+        this.physics.add.overlap(iceSpikes, gameState.smiley, () => {
+          currentlyPlaying = false
+          gameState.smiley.body.setAllowGravity(true)
+          gameState.smiley.body.setGravity(0, 600)
+          const gameOverTimer = this.time.addEvent({
+            delay: 1300,
+            callback: gameOver,
+            callbackScope: this,
+            loop: false,
+          });
+        })
 
         function gameOver() {
           this.scene.start('gameOver')
@@ -254,19 +270,44 @@ class IceLevel extends Phaser.Scene {
           gameState.smiley.anims.play('turn');
         }
       }
-        // if (gameState.time === 0) {
-        //   gameState.positionX = gameState.smiley.x
-        //   gameState.positionY = gameState.smiley.y
-        //   gameState.fireDelay = gameState.fireDelay * 0.8
-        //   gameState.speed = gameState.speed + 25
-        //   gameState.timeOrigin += 1
-        //   gameState.scoreTimer = gameState.scoreTimer * 1.1
-        //   gameState.movementSpeed++
-        //   gameState.speed = gameState.speed + 25
+        if (gameState.time === 0) {
+          gameState.positionX = gameState.smiley.x
+          gameState.positionY = gameState.smiley.y
+          gameState.fireDelay = gameState.fireDelay * 0.8
+          gameState.speed = gameState.speed + 25
+          gameState.timeOrigin += 1
+          gameState.scoreTimer = gameState.scoreTimer * 1.1
+          gameState.movementSpeed++
+          gameState.speed = gameState.speed + 25
 
 
-        //   this.scene.start(gameState.nextLevel)
-        // }
+          this.scene.start(gameState.nextLevel)
+        }
+
+        function moveWalls() {
+          if (currentlyPlaying === true) {
+            if (gameState.iceWallBottom.y > 675) { 
+            gameState.iceWallBottom.y -= 1
+            }
+            if (gameState.iceWallTop.y < -25) { 
+              gameState.iceWallTop.y += 1
+            }
+            if (gameState.iceWallLeft.x < -25) { 
+              gameState.iceWallLeft.x += 1
+              }5
+            if (gameState.iceWallRight.x > 1075) { 
+              gameState.iceWallRight.x -= 1
+              }
+          }
+        }
+
+        const wallMover = this.time.addEvent({
+          delay: 1,
+          callback: moveWalls(),
+          callbackScope: this,
+          loop: true,
+        });
+
 
     }
 }

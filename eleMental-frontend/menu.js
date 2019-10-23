@@ -16,7 +16,7 @@ class Menu extends Phaser.Scene {
         gameState.fireDelay = 700
         gameState.boulderDelay = 400
         gameState.positionX = 600
-        gameState.positionY = 745
+        gameState.positionY = 400
         gameState.speed = 225
         gameState.scoreTimer = 1000
         gameState.movementSpeed = 6
