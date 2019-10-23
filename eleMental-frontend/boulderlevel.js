@@ -23,7 +23,7 @@ class BoulderLevel extends Phaser.Scene {
 
         this.background = this.add.image(600,400,'background-green');
 
-        gameState.scoreText = this.add.text(100, 750, `1Score: ${gameState.score}`, { fontSize: '40px', fill: '#ffffff' })
+        gameState.scoreText = this.add.text(100, 750, `Score: ${gameState.score}`, { fontSize: '40px', fill: '#ffffff' })
 
         
         const boulders = this.physics.add.group()
@@ -161,31 +161,28 @@ class BoulderLevel extends Phaser.Scene {
 
     update(delta) {
 
-    if (currentlyPlaying === true) {
-    if(this.cursors.left.isDown) {
-        gameState.smiley.anims.play('left', true);
-        if (gameState.smiley.x > 90 && (gameState.smiley.y < 715 && gameState.smiley.y > 85)) gameState.smiley.x-=gameState.movementSpeed
-        else if (gameState.smiley.y > 390 && gameState.smiley.y < 410) gameState.smiley.x-=gameState.movementSpeed
-        else null
-    } else if(this.cursors.right.isDown) {
-      gameState.smiley.anims.play('right', true);
-        if (gameState.smiley.x < 1110 && (gameState.smiley.y < 715 && gameState.smiley.y > 85)) gameState.smiley.x+=gameState.movementSpeed
-        else if (gameState.smiley.y > 390 && gameState.smiley.y < 410) gameState.smiley.x+=gameState.movementSpeed
-        else null
-    } else if(this.cursors.up.isDown) {
-      gameState.smiley.anims.play('up', true);
-        if (gameState.smiley.y > 90) gameState.smiley.y-=gameState.movementSpeed
-        else if (gameState.smiley.x > 590 && gameState.smiley.x < 610) gameState.smiley.y-=gameState.movementSpeed
-        else null
-    } else if(this.cursors.down.isDown) {
-      gameState.smiley.anims.play('down', true);
-        if (gameState.smiley.y < 710) gameState.smiley.y+=gameState.movementSpeed
-        else if (gameState.smiley.x > 590 && gameState.smiley.x < 610) gameState.smiley.y+=gameState.movementSpeed 
-        else null
-    } else {
-      gameState.smiley.anims.play('turn');
-    }
-  }
+   
+      if (currentlyPlaying === true) {
+        if(this.cursors.left.isDown) {
+            gameState.smiley.anims.play('left', true);
+            if (gameState.smiley.x > 90) gameState.smiley.x-=gameState.movementSpeed
+     
+        } else if(this.cursors.right.isDown) {
+          gameState.smiley.anims.play('right', true);
+            if (gameState.smiley.x < 1110) gameState.smiley.x+=gameState.movementSpeed
+      
+        } else if(this.cursors.up.isDown) {
+          gameState.smiley.anims.play('up', true);
+            if (gameState.smiley.y > 90) gameState.smiley.y-=gameState.movementSpeed
+      
+        } else if(this.cursors.down.isDown) {
+          gameState.smiley.anims.play('down', true);
+            if (gameState.smiley.y < 710) gameState.smiley.y+=gameState.movementSpeed
+    
+        } else {
+          gameState.smiley.anims.play('turn');
+        }
+      }
 
         if (gameState.time === 0) {
           gameState.positionX = gameState.smiley.x
@@ -193,6 +190,7 @@ class BoulderLevel extends Phaser.Scene {
           gameState.boulderDelay = gameState.boulderDelay * 0.8
           gameState.timeOrigin += 1
           gameState.scoreTimer = gameState.scoreTimer * 1.1
+          gameState.speed = gameState.speed + 25
           gameState.movementSpeed++
           gameState.speed = gameState.speed + 25
 

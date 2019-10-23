@@ -1,16 +1,18 @@
-class FireLevel extends Phaser.Scene {
+class IceLevel extends Phaser.Scene {
 
     constructor() {
-        super({key:'fireLevel'});
+        super({key:'iceLevel'});
     }
 
     preload() {
 
         // this.load.crossOrigin = 'anonymous';
-        this.load.image('background-yellow', 'assets/background yellow.png');
+        this.load.image('background-blue', 'assets/background.png');
         // this.load.image('face', 'assets/scared-face.png');
+        this.load.image('spike', 'assets/icespikes.png')
 
-        this.load.image('fire', 'assets/fireball.png')
+        this.load.image('snowball-left', 'assets/snowball left.png')
+        this.load.image('snowball-right', 'assets/snowball right.png')
         this.load.image('explode', 'assets/muzzleflash3.png');
         this.load.image('smoke', 'assets/smoke-puff.png');
         this.load.spritesheet('nerd', 'assets/nerdspritesheet.png', {frameWidth: 67.3, frameHeight: 91.5 })
@@ -18,71 +20,75 @@ class FireLevel extends Phaser.Scene {
     }
 
     create() {
-        projectiles.fireBalls = []
+
+        const snowBalls = this.physics.add.group()
+        const iceSpikes = this.physics.add.group()
 
         gameState.time = gameState.timeOrigin
 
-        this.background = this.add.image(600,400,'background-yellow');
+        this.background = this.add.image(600,400,'background-blue');
+        gameState.iceSpikes = this.physics.add.sprite(100, 750, 'spike').setScale(0.8)
+        gameState.iceSpikes.body.setAllowGravity(false)
+        
 
         gameState.scoreText = this.add.text(100, 750, `Score: ${gameState.score}`, { fontSize: '40px', fill: '#ffffff' })
 
         gameState.nextLevel = gameState.level.sample()
 
+        gameState.smiley = this.physics.add.sprite(gameState.positionX,gameState.positionY,'nerd').setScale(.8);
+        gameState.smiley.body.setAllowGravity(false);
+        gameState.smiley.body.setCircle(35, 2, 2)
+
       
-        const fireBolts = this.physics.add.group()
 
 
-        function fireGen () {
+        function snowBallsGen () {
           if (currentlyPlaying === true) {
-            const yCoord = randomLocation(250, 1000)
+           const yCoord = randomLocation(100, 1100)
             const velocity = Math.random() * 500
-            projectiles.fire = fireBolts.create(-50, yCoord,'fire').setScale(.1);
-            projectiles.fire.body.setAllowGravity(false);
-            projectiles.fire.setVelocityX(velocity)
-            projectiles.fire.setVelocityY(velocity/2)
-            projectiles.fire.body.setCircle(300, 125, 125)
-            projectiles.fireBalls.push(projectiles.fire)
+            projectiles.snowBalls = snowBalls.create(-50, yCoord,'snowball-right').setScale(.4);
+            projectiles.snowBalls.body.setAllowGravity(false);
+            projectiles.snowBalls.setVelocityX(velocity)
+            projectiles.snowBalls.body.setSize(250, 30)
+            projectiles.snowBalls.body.setOffset(75, 50)
       }
           }
 
-          function fireGen2 () {
+          function snowBallsGen2 () {
             if (currentlyPlaying === true) {
-            const yCoord = randomLocation(250, 1000)
+            const yCoord = randomLocation(100, 1100)
             const velocity = Math.random() * 500
-            projectiles.fire = fireBolts.create(-50, yCoord,'fire').setScale(.1);
-            projectiles.fire.body.setAllowGravity(false);
-            projectiles.fire.setVelocityX(velocity)
-            projectiles.fire.setVelocityY(-velocity/2)
-            projectiles.fire.body.setCircle(300, 125, 125)
-            projectiles.fireBalls.push(projectiles.fire)
-
+            projectiles.snowBalls = snowBalls.create(-50, yCoord,'snowball-right').setScale(.4);
+            projectiles.snowBalls.body.setAllowGravity(false);
+            projectiles.snowBalls.setVelocityX(velocity)
+            projectiles.snowBalls.body.setSize(250, 30)
+            projectiles.snowBalls.body.setOffset(10, 40)
       }
           }
 
-          function fireGen3 () {
+          function snowBallsGen3 () {
             if (currentlyPlaying === true) {
-            const yCoord = randomLocation(250, 1000)
+           const yCoord = randomLocation(100, 1100)
             const velocity = Math.random() * 500
-            projectiles.fire = fireBolts.create(1250, yCoord,'fire').setScale(.1);
-            projectiles.fire.body.setAllowGravity(false);
-            projectiles.fire.setVelocityX(-velocity)
-            projectiles.fire.setVelocityY(-velocity/2)
-            projectiles.fire.body.setCircle(300, 125, 125)
-            projectiles.fireBalls.push(projectiles.fire)
+            projectiles.snowBalls = snowBalls.create(1250, yCoord,'snowball-left').setScale(.4);
+            projectiles.snowBalls.body.setAllowGravity(false);
+            projectiles.snowBalls.setVelocityX(-velocity)
+            projectiles.snowBalls.body.setSize(250, 30)
+            projectiles.snowBalls.body.setOffset(10, 40)
+            
 
             }
           }
 
-          function fireGen4 () {
+          function snowBallsGen4 () {
             if (currentlyPlaying === true) {
-            const yCoord = randomLocation(250, 1000)
+           const yCoord = randomLocation(100, 1100)
             const velocity = Math.random() * 500
-            projectiles.fire = fireBolts.create(1250, yCoord,'fire').setScale(.1);
-            projectiles.fire.body.setAllowGravity(false);
-            projectiles.fire.setVelocityX(-velocity)
-            projectiles.fire.setVelocityY(velocity/2)
-            projectiles.fire.body.setCircle(300, 125, 125)
-            projectiles.fireBalls.push(projectiles.fire)
+            projectiles.snowBalls = snowBalls.create(1250, yCoord,'snowball-left').setScale(.4);
+            projectiles.snowBalls.body.setAllowGravity(false);
+            projectiles.snowBalls.setVelocityX(-velocity)
+            projectiles.snowBalls.body.setSize(250, 30)
+            projectiles.snowBalls.body.setOffset(10, 40)
 
             }
           }
@@ -91,30 +97,30 @@ class FireLevel extends Phaser.Scene {
               global.add.text(400, 600, 'GAME OVER!', { fontSize: '60px', color: '#ff0000' })
           }
 
-          const fireGenLoop = this.time.addEvent({
+          const snowBallsLoop = this.time.addEvent({
             delay: gameState.fireDelay,
-            callback: fireGen,
+            callback: snowBallsGen,
             callbackScope: this,
             loop: true,
           });
 
-          const fireGenLoop2 = this.time.addEvent({
+          const snowBallsLoop2 = this.time.addEvent({
             delay: gameState.fireDelay,
-            callback: fireGen2,
+            callback: snowBallsGen2,
             callbackScope: this,
             loop: true,
           });
 
-          const fireGenLoop3 = this.time.addEvent({
+          const snowBallsLoop3 = this.time.addEvent({
             delay: gameState.fireDelay,
-            callback: fireGen3,
+            callback: snowBallsGen3,
             callbackScope: this,
             loop: true,
           });
 
-          const fireGenLoop4 = this.time.addEvent({
+          const snowBallsLoop4 = this.time.addEvent({
             delay: gameState.fireDelay,
-            callback: fireGen4,
+            callback: snowBallsGen4,
             callbackScope: this,
             loop: true,
           });
@@ -203,20 +209,20 @@ class FireLevel extends Phaser.Scene {
     
         gameState.nuke.setCallback('onUpdate', draw, [], this);
     
-        this.physics.add.overlap(fireBolts, gameState.smiley, () => {
-          currentlyPlaying = false
-          generate(gameState.smiley.x, gameState.smiley.y)
-          gameState.smiley.destroy();
-          // projectiles.fireBalls.forEach(fireBall => {
-          //   generate(fireBall.x, fireBall.y)
-          // })
-          const gameOverTimer = this.time.addEvent({
-            delay: 1300,
-            callback: gameOver,
-            callbackScope: this,
-            loop: false,
-          });
-        })
+        // this.physics.add.overlap(snowBalls, gameState.smiley, () => {
+        //   currentlyPlaying = false
+        //   generate(gameState.smiley.x, gameState.smiley.y)
+        //   gameState.smiley.destroy();
+        //   // projectiles.fireBalls.forEach(fireBall => {
+        //   //   generate(fireBall.x, fireBall.y)
+        //   // })
+        //   const gameOverTimer = this.time.addEvent({
+        //     delay: 1300,
+        //     callback: gameOver,
+        //     callbackScope: this,
+        //     loop: false,
+        //   });
+        // })
 
         function gameOver() {
           this.scene.start('gameOver')
@@ -248,19 +254,19 @@ class FireLevel extends Phaser.Scene {
           gameState.smiley.anims.play('turn');
         }
       }
-        if (gameState.time === 0) {
-          gameState.positionX = gameState.smiley.x
-          gameState.positionY = gameState.smiley.y
-          gameState.fireDelay = gameState.fireDelay * 0.8
-          gameState.speed = gameState.speed + 25
-          gameState.timeOrigin += 1
-          gameState.scoreTimer = gameState.scoreTimer * 1.1
-          gameState.movementSpeed++
-          gameState.speed = gameState.speed + 25
+        // if (gameState.time === 0) {
+        //   gameState.positionX = gameState.smiley.x
+        //   gameState.positionY = gameState.smiley.y
+        //   gameState.fireDelay = gameState.fireDelay * 0.8
+        //   gameState.speed = gameState.speed + 25
+        //   gameState.timeOrigin += 1
+        //   gameState.scoreTimer = gameState.scoreTimer * 1.1
+        //   gameState.movementSpeed++
+        //   gameState.speed = gameState.speed + 25
 
 
-          this.scene.start(gameState.nextLevel)
-        }
+        //   this.scene.start(gameState.nextLevel)
+        // }
 
     }
 }
