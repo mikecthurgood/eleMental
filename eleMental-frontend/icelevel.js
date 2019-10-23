@@ -164,7 +164,7 @@ class IceLevel extends Phaser.Scene {
             }
           }
  
-        gameState.smiley = this.physics.add.sprite(gameState.positionX,gameState.positionY,'nerd').setScale(.8);
+        gameState.smiley = this.physics.add.sprite(gameState.positionX, gameState.positionY,'nerd').setScale(.8);
         gameState.smiley.body.setAllowGravity(false);
         gameState.smiley.body.setSize(30, 40)
 
@@ -218,8 +218,7 @@ class IceLevel extends Phaser.Scene {
     
         this.physics.add.overlap(snowBalls, gameState.smiley, () => {
           currentlyPlaying = false
-          generate(gameState.smiley.x, gameState.smiley.y)
-          gameState.smiley.destroy();
+          gameState.smiley.body.setAllowGravity(true)
          
           const gameOverTimer = this.time.addEvent({
             delay: 1300,
@@ -231,9 +230,8 @@ class IceLevel extends Phaser.Scene {
 
         this.physics.add.overlap(iceSpikes, gameState.smiley, () => {
           currentlyPlaying = false
-          generate(gameState.smiley.x, gameState.smiley.y)
-          gameState.smiley.destroy();
-         
+          gameState.smiley.body.setAllowGravity(true)
+          gameState.smiley.body.setGravity(0, 600)
           const gameOverTimer = this.time.addEvent({
             delay: 1300,
             callback: gameOver,

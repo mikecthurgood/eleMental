@@ -23,7 +23,7 @@ gameState.timeOrigin = 7
 gameState.fireDelay = 500
 gameState.boulderDelay = 700
 gameState.positionX = 600
-gameState.positionY = 745
+gameState.positionY = 400
 let currentlyPlaying = true
 
 if (!gameState.credits) {

@@ -13,7 +13,7 @@ class GetReady extends Phaser.Scene {
 
         gameState.readyTime = 3
         gameState.positionX = 600
-        gameState.positionY = 745
+        gameState.positionY = 400
         
         gameState.scoreText = this.add.text(100, 750, `Score: ${gameState.score}`, { fontSize: '40px', fill: '#ffffff' })
         gameState.nextLevel = gameState.level.sample()
