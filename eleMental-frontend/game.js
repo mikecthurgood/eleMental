@@ -8,7 +8,7 @@ const config = {
         arcade: {
             gravity: {y : 400},
             enableBody: true,
-            debug: true
+            // debug: true
         }
     },
     scene: [Menu, GetReady, FireLevel, BoulderLevel, MissileLevel, IceLevel, GameOver, LeaderBoard]
@@ -56,7 +56,7 @@ function smileyMove (smiley) {
     return this[~~(Math.random() * this.length)];
   }
 
-gameState.level = ["missileLevel", "fireLevel", "boulderLevel"]
+gameState.level = ["missileLevel", "fireLevel", "boulderLevel", "iceLevel"]
 
 function generate(x, y) {
     gameState.blast.x = x;

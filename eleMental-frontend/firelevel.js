@@ -153,7 +153,7 @@ class FireLevel extends Phaser.Scene {
  
         gameState.smiley = this.physics.add.sprite(gameState.positionX,gameState.positionY,'nerd').setScale(.8);
         gameState.smiley.body.setAllowGravity(false);
-        gameState.smiley.body.setCircle(35, 2, 2)
+        gameState.smiley.body.setSize(30, 40)
 
         this.cursors = this.input.keyboard.createCursorKeys()
 
