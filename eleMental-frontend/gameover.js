@@ -35,13 +35,13 @@ class GameOver extends Phaser.Scene {
 
         console.log(`Score: ${gameState.score}`)
 
-        function leaderBoard() {
-            this.scene.start('leaderBoard')
+        function enterHiscore() {
+            this.scene.start('newHiscore')
         }
 
         const leaderBoardTimer = this.time.addEvent({
-            delay: 5000,
-            callback: leaderBoard,
+            delay: 3000,
+            callback: enterHiscore,
             callbackScope: this,
             loop: false,
           });

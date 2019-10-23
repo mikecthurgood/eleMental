@@ -64,7 +64,10 @@ class NewHiscore extends Phaser.Scene {
         body: JSON.stringify({ initials: this.name, score: gameState.score })
       }
       return fetch("http://localhost:3000/hiscores", config)
-        .then(res => game.scene.start("leaderBoard"))
+        .then(res => {
+          hiscores = res.json();
+          game.scene.start("leaderBoard");
+        })
         .catch(console.error);
     }
 
