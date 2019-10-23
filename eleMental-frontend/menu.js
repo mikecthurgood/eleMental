@@ -22,6 +22,9 @@ class Menu extends Phaser.Scene {
         gameState.movementSpeed = 6
         currentlyPlaying = true
         
+        fetch("http://localhost:3000/hiscores")
+          .then(res => res.json())
+          .then(json => hiscores = json)
 
         let creditText = this.add.text(50, 45, `Credits: ${gameState.credits}`, { fontSize: '20px', fill: '#00ffff' })
         this.add.text(50, 75, `1 game = 1 credit`, { fontSize: '15px', fill: '#ffffff' })
