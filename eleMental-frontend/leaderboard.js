@@ -19,43 +19,20 @@ class LeaderBoard extends Phaser.Scene {
         const YBASE = 80
         const XBASE = 80
 
-        function headerText1() {
-            gameState.LeaderBoardText = this.add.text(300, 50, `HIGH SCORES`, { fontSize: '100px', fill: '#ffff00' })
-        }            
-        
-        function headerText2() {
-            gameState.LeaderBoardText = this.add.text(300, 50, `HIGH SCORES`, { fontSize: '100px', fill: '#ff00ff' })
-        }
-        function headerText3() {
-            gameState.LeaderBoardText = this.add.text(300, 50, `HIGH SCORES`, { fontSize: '100px', fill: '#00ffff' })
-        }
-
-        
+        gameState.LeaderBoardText = this.add.text(300, 50, `HIGH SCORES`, { fontSize: '100px', fill: '#ffff00' })
 
         const flashTextLoop = this.time.addEvent({
-            delay: 50,
-            callback: headerText1,
-            callbackScope: this,
-            loop: true,
-          });
+          delay: 50,
+          callback: flashTextColor,
+          callbackScope: this,
+          loop: true
+        });
 
-          const flashTextLoop1 = this.time.addEvent({
-            delay: 75,
-            callback: headerText2,
-            callbackScope: this,
-            loop: true,
-          });
-
-
-          const flashTextLoop2 = this.time.addEvent({
-            delay: 100,
-            callback: headerText3,
-            callbackScope: this,
-            loop: true,
-          });
-
-
-          
+        function flashTextColor() {
+          const colors = ["#FF00FF", "#00FFFF", "#FFFF00"];
+          const selection = Math.floor(Math.random() * 3);
+          gameState.LeaderBoardText.setColor(colors[selection]);
+        }       
         
        this.add.text(XBASE + 280, YBASE + 100, `RANK`, { fontSize: '40px', fill: '#ff0000' })
        this.add.text(XBASE + 480, YBASE + 100, `NAME`, { fontSize: '40px', fill: '#00ff00' })
