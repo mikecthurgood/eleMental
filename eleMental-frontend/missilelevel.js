@@ -153,24 +153,20 @@ class MissileLevel extends Phaser.Scene {
        if (currentlyPlaying === true) {
     if(this.cursors.left.isDown) {
         gameState.smiley.anims.play('left', true);
-        if (gameState.smiley.x > 90 && (gameState.smiley.y < 715 && gameState.smiley.y > 85)) gameState.smiley.x-=gameState.movementSpeed
-        else if (gameState.smiley.y > 390 && gameState.smiley.y < 410) gameState.smiley.x-=gameState.movementSpeed
-        else null
+        if (gameState.smiley.x > 90) gameState.smiley.x-=gameState.movementSpeed
+ 
     } else if(this.cursors.right.isDown) {
       gameState.smiley.anims.play('right', true);
-        if (gameState.smiley.x < 1110 && (gameState.smiley.y < 715 && gameState.smiley.y > 85)) gameState.smiley.x+=gameState.movementSpeed
-        else if (gameState.smiley.y > 390 && gameState.smiley.y < 410) gameState.smiley.x+=gameState.movementSpeed
-        else null
+        if (gameState.smiley.x < 1110) gameState.smiley.x+=gameState.movementSpeed
+  
     } else if(this.cursors.up.isDown) {
       gameState.smiley.anims.play('up', true);
         if (gameState.smiley.y > 90) gameState.smiley.y-=gameState.movementSpeed
-        else if (gameState.smiley.x > 590 && gameState.smiley.x < 610) gameState.smiley.y-=gameState.movementSpeed
-        else null
+  
     } else if(this.cursors.down.isDown) {
       gameState.smiley.anims.play('down', true);
         if (gameState.smiley.y < 710) gameState.smiley.y+=gameState.movementSpeed
-        else if (gameState.smiley.x > 590 && gameState.smiley.x < 610) gameState.smiley.y+=gameState.movementSpeed 
-        else null
+
     } else {
       gameState.smiley.anims.play('turn');
     }

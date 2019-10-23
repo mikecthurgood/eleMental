@@ -61,7 +61,7 @@ class NewHiscore extends Phaser.Scene {
       const config = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: this.name, score: gameState.score })
+        body: JSON.stringify({ initials: this.name, score: gameState.score })
       }
       return fetch("http://localhost:3000/hiscores", config)
         .then(res => game.scene.start("leaderBoard"))
