@@ -15,7 +15,7 @@ class GameOver extends Phaser.Scene {
         // gameState.positionX = 600
         // gameState.positionY = 745
         
-        gameState.gameOverText = this.add.text(80, 200, `GAME OVER`, { fontSize: '200px', fill: '#ff0000' })
+        gameState.gameOverText = this.add.text(240, 150, `DEAD`, { fontSize: '300px', fill: '#ff0000' })
         
         gameState.scoreText = this.add.text(300, 400, `You scored \n${gameState.score} points`, { fontSize: '100px', fill: '#ffffff' })          
         //   gameState.gameOverText = this.add.text(550, 500, `${gameState.readyTime}`, { fontSize: '200px', fill: '#ffffff' })
@@ -35,13 +35,13 @@ class GameOver extends Phaser.Scene {
 
         console.log(`Score: ${gameState.score}`)
 
-        function leaderBoard() {
-            this.scene.start('leaderBoard')
+        function enterHiscore() {
+            this.scene.start('newHiscore')
         }
 
         const leaderBoardTimer = this.time.addEvent({
-            delay: 5000,
-            callback: leaderBoard,
+            delay: 3000,
+            callback: enterHiscore,
             callbackScope: this,
             loop: false,
           });

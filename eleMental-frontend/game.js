@@ -11,13 +11,11 @@ const config = {
             // debug: true
         }
     },
-    scene: [Menu, GetReady, FireLevel, BoulderLevel, MissileLevel, GameOver]
+    scene: [Menu, GetReady, FireLevel, BoulderLevel, MissileLevel, IceLevel, GameOver, LeaderBoard, NewHiscore]
 };
 const game = new Phaser.Game(config);2
 const gameState = {}
 const projectiles = {}
-
-
 gameState.score = 0
 gameState.time = 0
 gameState.scoreTimer = 1000
@@ -25,8 +23,14 @@ gameState.timeOrigin = 7
 gameState.fireDelay = 500
 gameState.boulderDelay = 700
 gameState.positionX = 600
-gameState.positionY = 745
+gameState.positionY = 400
 let currentlyPlaying = true
+
+if (!gameState.credits) {
+    gameState.credits = 0
+}
+
+
 const ROTATION_SPEED = 2 * Math.PI; // 0.5 arc/s, 2 s/arc
 const ROTATION_SPEED_DEGREES = Phaser.Math.RadToDeg(ROTATION_SPEED);
 const TOLERANCE = 0.02 * ROTATION_SPEED;
@@ -52,7 +56,7 @@ function smileyMove (smiley) {
     return this[~~(Math.random() * this.length)];
   }
 
-gameState.level = ["missileLevel", "fireLevel", "boulderLevel"]
+gameState.level = ["missileLevel", "fireLevel", "boulderLevel", "iceLevel"]
 
 function generate(x, y) {
     gameState.blast.x = x;
@@ -101,14 +105,14 @@ function generate(x, y) {
 }
 
 let hiscores = [
-    {id: 1, name: 'mct', score: 640}, 
-    {id: 2, name: 'rod', score: 490}, 
-    {id: 3, name: 'agm', score: 420}, 
-    {id: 4, name: 'cgk', score: 280}, 
-    {id: 5, name: 'jgt', score: 2}, 
-    {id: 6, name: 'plr', score: 0}, 
-    {id: 7, name: 'plr', score: 0}, 
-    {id: 8, name: 'plr', score: 0}, 
-    {id: 9, name: 'plr', score: 0}, 
-    {id: 10, name: 'plr', score: 0} 
+    {id: 1, name: 'cwk', score: 1340},
+    {id: 2, name: 'MIK', score: 640},
+    {id: 3, name: 'rod', score: 490}, 
+    {id: 4, name: 'agm', score: 420}, 
+    {id: 5, name: 'cgk', score: 280}, 
+    {id: 6, name: 'jgt', score: 2}, 
+    {id: 7, name: '---', score: 0}, 
+    {id: 8, name: '---', score: 0}, 
+    {id: 9, name: '---', score: 0}, 
+    {id: 10, name: '---', score: 0}
 ]

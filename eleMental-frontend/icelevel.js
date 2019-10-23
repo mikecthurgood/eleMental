@@ -1,16 +1,21 @@
-class FireLevel extends Phaser.Scene {
+class IceLevel extends Phaser.Scene {
 
     constructor() {
-        super({key:'fireLevel'});
+        super({key:'iceLevel'});
     }
 
     preload() {
 
         // this.load.crossOrigin = 'anonymous';
-        this.load.image('background-yellow', 'assets/background yellow.png');
+        this.load.image('background-snow', 'assets/background snow.png');
         // this.load.image('face', 'assets/scared-face.png');
+        this.load.image('spike-left', 'assets/ice spikes left wall.png')
+        this.load.image('spike-right', 'assets/ice spikes right wall.png')
+        this.load.image('spike-bottom', 'assets/spike wall up.png')
+        this.load.image('spike-top', 'assets/spike wall.png')
 
-        this.load.image('fire', 'assets/fireball.png')
+        this.load.image('snowball-left', 'assets/snowball left.png')
+        this.load.image('snowball-right', 'assets/snowball right.png')
         this.load.image('explode', 'assets/muzzleflash3.png');
         this.load.image('smoke', 'assets/smoke-puff.png');
         this.load.spritesheet('nerd', 'assets/nerdspritesheet.png', {frameWidth: 67.3, frameHeight: 91.5 })
@@ -18,71 +23,79 @@ class FireLevel extends Phaser.Scene {
     }
 
     create() {
-        projectiles.fireBalls = []
+
+        const snowBalls = this.physics.add.group()
+        const iceSpikes = this.physics.add.group()
 
         gameState.time = gameState.timeOrigin
 
-        this.background = this.add.image(600,400,'background-yellow');
+        this.background = this.add.image(600,400,'background-snow');
+        gameState.iceWallBottom = iceSpikes.create(600, 850, 'spike-bottom').body.setAllowGravity(false)
+        gameState.iceWallLeft = iceSpikes.create(-50, 400, 'spike-left').body.setAllowGravity(false)
+        gameState.iceWallRight = iceSpikes.create(1250, 400, 'spike-right').body.setAllowGravity(false)
+        gameState.iceWallTop = iceSpikes.create(600, -50, 'spike-top').body.setAllowGravity(false)
 
+        
+        // gameState.iceSpikes.body.setAllowGravity5(false)
+       
         gameState.scoreText = this.add.text(100, 750, `Score: ${gameState.score}`, { fontSize: '40px', fill: '#ffffff' })
 
         gameState.nextLevel = gameState.level.sample()
 
+        // gameState.smiley = this.physics.add.sprite(gameState.positionX,gameState.positionY,'nerd').setScale(.8);
+        // gameState.smiley.body.setAllowGravity(false);
+        // gameState.smiley.body.setCircle(35, 2, 2)
+
       
-        const fireBolts = this.physics.add.group()
 
 
-        function fireGen () {
+        function snowBallsGen () {
           if (currentlyPlaying === true) {
-            const yCoord = randomLocation(250, 1000)
+           const yCoord = randomLocation(100, 1100)
             const velocity = Math.random() * 500
-            projectiles.fire = fireBolts.create(-50, yCoord,'fire').setScale(.1);
-            projectiles.fire.body.setAllowGravity(false);
-            projectiles.fire.setVelocityX(velocity)
-            projectiles.fire.setVelocityY(velocity/2)
-            projectiles.fire.body.setCircle(300, 125, 125)
-            projectiles.fireBalls.push(projectiles.fire)
+            projectiles.snowBalls = snowBalls.create(-50, yCoord,'snowball-right').setScale(.4);
+            projectiles.snowBalls.body.setAllowGravity(false);
+            projectiles.snowBalls.setVelocityX(velocity)
+            projectiles.snowBalls.body.setSize(250, 30)
+            projectiles.snowBalls.body.setOffset(75, 50)
       }
           }
 
-          function fireGen2 () {
+          function snowBallsGen2 () {
             if (currentlyPlaying === true) {
-            const yCoord = randomLocation(250, 1000)
+            const yCoord = randomLocation(100, 1100)
             const velocity = Math.random() * 500
-            projectiles.fire = fireBolts.create(-50, yCoord,'fire').setScale(.1);
-            projectiles.fire.body.setAllowGravity(false);
-            projectiles.fire.setVelocityX(velocity)
-            projectiles.fire.setVelocityY(-velocity/2)
-            projectiles.fire.body.setCircle(300, 125, 125)
-            projectiles.fireBalls.push(projectiles.fire)
-
+            projectiles.snowBalls = snowBalls.create(-50, yCoord,'snowball-right').setScale(.4);
+            projectiles.snowBalls.body.setAllowGravity(false);
+            projectiles.snowBalls.setVelocityX(velocity)
+            projectiles.snowBalls.body.setSize(250, 30)
+            projectiles.snowBalls.body.setOffset(10, 40)
       }
           }
 
-          function fireGen3 () {
+          function snowBallsGen3 () {
             if (currentlyPlaying === true) {
-            const yCoord = randomLocation(250, 1000)
+           const yCoord = randomLocation(100, 1100)
             const velocity = Math.random() * 500
-            projectiles.fire = fireBolts.create(1250, yCoord,'fire').setScale(.1);
-            projectiles.fire.body.setAllowGravity(false);
-            projectiles.fire.setVelocityX(-velocity)
-            projectiles.fire.setVelocityY(-velocity/2)
-            projectiles.fire.body.setCircle(300, 125, 125)
-            projectiles.fireBalls.push(projectiles.fire)
+            projectiles.snowBalls = snowBalls.create(1250, yCoord,'snowball-left').setScale(.4);
+            projectiles.snowBalls.body.setAllowGravity(false);
+            projectiles.snowBalls.setVelocityX(-velocity)
+            projectiles.snowBalls.body.setSize(250, 30)
+            projectiles.snowBalls.body.setOffset(10, 40)
+            
 
             }
           }
 
-          function fireGen4 () {
+          function snowBallsGen4 () {
             if (currentlyPlaying === true) {
-            const yCoord = randomLocation(250, 1000)
+           const yCoord = randomLocation(100, 1100)
             const velocity = Math.random() * 500
-            projectiles.fire = fireBolts.create(1250, yCoord,'fire').setScale(.1);
-            projectiles.fire.body.setAllowGravity(false);
-            projectiles.fire.setVelocityX(-velocity)
-            projectiles.fire.setVelocityY(velocity/2)
-            projectiles.fire.body.setCircle(300, 125, 125)
-            projectiles.fireBalls.push(projectiles.fire)
+            projectiles.snowBalls = snowBalls.create(1250, yCoord,'snowball-left').setScale(.4);
+            projectiles.snowBalls.body.setAllowGravity(false);
+            projectiles.snowBalls.setVelocityX(-velocity)
+            projectiles.snowBalls.body.setSize(250, 30)
+            projectiles.snowBalls.body.setOffset(10, 40)
 
             }
           }
@@ -91,30 +104,30 @@ class FireLevel extends Phaser.Scene {
               global.add.text(400, 600, 'GAME OVER!', { fontSize: '60px', color: '#ff0000' })
           }
 
-          const fireGenLoop = this.time.addEvent({
+          const snowBallsLoop = this.time.addEvent({
             delay: gameState.fireDelay,
-            callback: fireGen,
+            callback: snowBallsGen,
             callbackScope: this,
             loop: true,
           });
 
-          const fireGenLoop2 = this.time.addEvent({
+          const snowBallsLoop2 = this.time.addEvent({
             delay: gameState.fireDelay,
-            callback: fireGen2,
+            callback: snowBallsGen2,
             callbackScope: this,
             loop: true,
           });
 
-          const fireGenLoop3 = this.time.addEvent({
+          const snowBallsLoop3 = this.time.addEvent({
             delay: gameState.fireDelay,
-            callback: fireGen3,
+            callback: snowBallsGen3,
             callbackScope: this,
             loop: true,
           });
 
-          const fireGenLoop4 = this.time.addEvent({
+          const snowBallsLoop4 = this.time.addEvent({
             delay: gameState.fireDelay,
-            callback: fireGen4,
+            callback: snowBallsGen4,
             callbackScope: this,
             loop: true,
           });
@@ -151,7 +164,7 @@ class FireLevel extends Phaser.Scene {
             }
           }
  
-        gameState.smiley = this.physics.add.sprite(gameState.positionX,gameState.positionY,'nerd').setScale(.8);
+        gameState.smiley = this.physics.add.sprite(gameState.positionX, gameState.positionY,'nerd').setScale(.8);
         gameState.smiley.body.setAllowGravity(false);
         gameState.smiley.body.setSize(30, 40)
 
@@ -203,13 +216,22 @@ class FireLevel extends Phaser.Scene {
     
         gameState.nuke.setCallback('onUpdate', draw, [], this);
     
-        this.physics.add.overlap(fireBolts, gameState.smiley, () => {
+        this.physics.add.overlap(snowBalls, gameState.smiley, () => {
           currentlyPlaying = false
-          generate(gameState.smiley.x, gameState.smiley.y)
-          gameState.smiley.destroy();
-          // projectiles.fireBalls.forEach(fireBall => {
-          //   generate(fireBall.x, fireBall.y)
-          // })
+          gameState.smiley.body.setAllowGravity(true)
+         
+          const gameOverTimer = this.time.addEvent({
+            delay: 1300,
+            callback: gameOver,
+            callbackScope: this,
+            loop: false,
+          });
+        })
+
+        this.physics.add.overlap(iceSpikes, gameState.smiley, () => {
+          currentlyPlaying = false
+          gameState.smiley.body.setAllowGravity(true)
+          gameState.smiley.body.setGravity(0, 600)
           const gameOverTimer = this.time.addEvent({
             delay: 1300,
             callback: gameOver,
@@ -261,6 +283,31 @@ class FireLevel extends Phaser.Scene {
 
           this.scene.start(gameState.nextLevel)
         }
+
+        function moveWalls() {
+          if (currentlyPlaying === true) {
+            if (gameState.iceWallBottom.y > 675) { 
+            gameState.iceWallBottom.y -= 1
+            }
+            if (gameState.iceWallTop.y < -25) { 
+              gameState.iceWallTop.y += 1
+            }
+            if (gameState.iceWallLeft.x < -25) { 
+              gameState.iceWallLeft.x += 1
+              }5
+            if (gameState.iceWallRight.x > 1075) { 
+              gameState.iceWallRight.x -= 1
+              }
+          }
+        }
+
+        const wallMover = this.time.addEvent({
+          delay: 1,
+          callback: moveWalls(),
+          callbackScope: this,
+          loop: true,
+        });
+
 
     }
 }
