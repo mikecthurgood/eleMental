@@ -39,6 +39,10 @@ class Menu extends Phaser.Scene {
             if(e.key === "4") {
                 this.scene.start("missileLevel");
             }
+
+            if(e.key === "5") {
+                this.scene.start("newHiscore");
+            }
         }, this);
 
     }

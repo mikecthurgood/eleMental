@@ -11,7 +11,7 @@ const config = {
             // debug: true
         }
     },
-    scene: [Menu, GetReady, FireLevel, BoulderLevel, MissileLevel, GameOver]
+    scene: [Menu, GetReady, FireLevel, BoulderLevel, MissileLevel, GameOver, NewHiscore]
 };
 const game = new Phaser.Game(config);2
 const gameState = {}
