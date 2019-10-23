@@ -30,10 +30,10 @@ class BoulderLevel extends Phaser.Scene {
 
         function boulderGen () {
           if (currentlyPlaying === true) {
-            const xCoord = randomLocation(100, 1100)
+            const xCoord = randomLocation(50, 1150)
             // const velocity = Math.random() * 500
             const bounce = Math.random()
-            projectiles.boulder = boulders.create(xCoord, 0,'boulder');
+            projectiles.boulder = boulders.create(xCoord, -150,'boulder');
             projectiles.boulder.setScale(.4)
             projectiles.boulder.body.collideWorldBounds = true;
             projectiles.boulder.body.setCircle(100, 10, 10)

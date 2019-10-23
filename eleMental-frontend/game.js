@@ -2,6 +2,7 @@ const config = {
     type: Phaser.AUTO,
     width: 1200,
     height: 800,
+    pixelArt: true,
     physics: {
         default: 'arcade',
         arcade: {
@@ -98,3 +99,16 @@ function generate(x, y) {
     gameState.rt.restore;
 
 }
+
+let hiscores = [
+    {id: 1, name: 'mct', score: 640}, 
+    {id: 2, name: 'rod', score: 490}, 
+    {id: 3, name: 'agm', score: 420}, 
+    {id: 4, name: 'cgk', score: 280}, 
+    {id: 5, name: 'jgt', score: 2}, 
+    {id: 6, name: 'plr', score: 0}, 
+    {id: 7, name: 'plr', score: 0}, 
+    {id: 8, name: 'plr', score: 0}, 
+    {id: 9, name: 'plr', score: 0}, 
+    {id: 10, name: 'plr', score: 0} 
+]
