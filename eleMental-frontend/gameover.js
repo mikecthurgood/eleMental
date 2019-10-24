@@ -1,11 +1,11 @@
 class GameOver extends Phaser.Scene {
 
     constructor() {
-        super({key:'gameOver'});
+        super({ key: 'gameOver' });
     }
 
     preload() {
-        
+
 
     }
 
@@ -14,13 +14,13 @@ class GameOver extends Phaser.Scene {
         // gameState.readyTime = 3
         // gameState.positionX = 600
         // gameState.positionY = 745
-        
+
         gameState.gameOverText = this.add.text(240, 150, `DEAD`, { fontSize: '300px', fill: '#ff0000' })
-        
-        gameState.scoreText = this.add.text(300, 400, `You scored \n${gameState.score} points`, { fontSize: '100px', fill: '#ffffff' })          
+
+        gameState.scoreText = this.add.text(300, 400, `You scored \n${gameState.score} points`, { fontSize: '100px', fill: '#ffffff' })
         //   gameState.gameOverText = this.add.text(550, 500, `${gameState.readyTime}`, { fontSize: '200px', fill: '#ffffff' })
 
-        function flashText() {    
+        function flashText() {
             gameState.gameOverText.visible = !gameState.gameOverText.visible
         }
 
@@ -29,7 +29,7 @@ class GameOver extends Phaser.Scene {
             callback: flashText,
             callbackScope: this,
             loop: true,
-          });
+        });
 
         this.cursors = this.input.keyboard.createCursorKeys()
 
@@ -44,9 +44,9 @@ class GameOver extends Phaser.Scene {
             callback: enterHiscore,
             callbackScope: this,
             loop: false,
-          });
+        });
 
-          
+
     }
 
     update(delta) {

@@ -1,14 +1,13 @@
 class Menu extends Phaser.Scene {
 
     constructor() {
-        super({key:'menu'});
+        super({ key: 'menu' });
     }
     preload() {
         this.load.image('eleMental', 'assets/elemental.jpg');
     }
 
     create() {
-
         gameState.score = 0
         gameState.time = 0
         gameState.scoreTimer = 1000
@@ -20,36 +19,37 @@ class Menu extends Phaser.Scene {
         gameState.speed = 225
         gameState.scoreTimer = 1000
         gameState.movementSpeed = 6
+        gameState.playerSpeed = 325
         currentlyPlaying = true
         gameState.levelCounter = 0
         gameState.windSize = 0.8
-        
+
         fetch("http://localhost:3000/hiscores")
-          .then(res => res.json())
-          .then(json => hiscores = json)
+            .then(res => res.json())
+            .then(json => hiscores = json)
 
         let creditText = this.add.text(50, 45, `Credits: ${gameState.credits}`, { fontSize: '20px', fill: '#00ffff' })
         this.add.text(50, 75, `1 game = 1 credit`, { fontSize: '15px', fill: '#ffffff' })
         this.add.text(50, 100, `Press C to enter a credit`, { fontSize: '15px', fill: '#ffffff' })
 
-        
+
         let startText = this.add.text(350, 700, `Press Space Bar to Start Game`, { fontSize: '30px', fill: '#ffffff' })
         if (gameState.credits === 0) {
             startText.visible = false
         }
 
         function flashCredits() {
-            if (gameState.credits === 0) {  
-            creditText.visible = !creditText.visible
+            if (gameState.credits === 0) {
+                creditText.visible = !creditText.visible
             } else {
                 creditText.visible = true
             }
         }
 
         function flashStart() {
-            if (gameState.credits > 0) {  
+            if (gameState.credits > 0) {
                 startText.visible = !startText.visible
-                } 
+            }
         }
 
         const flashTextLoop = this.time.addEvent({
@@ -57,50 +57,50 @@ class Menu extends Phaser.Scene {
             callback: flashCredits,
             callbackScope: this,
             loop: true,
-          });
+        });
 
-          const flashStartLoop = this.time.addEvent({
+        const flashStartLoop = this.time.addEvent({
             delay: 250,
             callback: flashStart,
             callbackScope: this,
             loop: true,
-          });
-        
-        this.image = this.add.image(600,400,'eleMental');
+        });
+
+        this.image = this.add.image(600, 400, 'eleMental');
 
         this.input.keyboard.on('keyup', function (e) {
-            if(e.key === "1") {
+            if (e.key === "1") {
                 this.scene.start("getReady");
             }
-            if(e.key === "2") {
+            if (e.key === "2") {
                 this.scene.start("fireLevel");
             }
 
-            if(e.key === "3") {
+            if (e.key === "3") {
                 this.scene.start("boulderLevel");
             }
 
-            if(e.key === "4") {
+            if (e.key === "4") {
                 this.scene.start("missileLevel");
             }
 
-            if(e.key === "5") {
+            if (e.key === "5") {
                 this.scene.start("iceLevel");
             }
 
-            if(e.key === "6") {
+            if (e.key === "6") {
                 this.scene.start("windLevel");
             }
 
-            if(e.key === "8") {
+            if (e.key === "8") {
                 this.scene.start("newHiscore");
             }
 
-            if(e.key === "9") {
+            if (e.key === "9") {
                 this.scene.start("leaderBoard");
             }
 
-            if(e.key === "c") {
+            if (e.key === "c") {
                 gameState.credits += 1
                 creditText.setText(`Credits ${gameState.credits}`)
                 console.log(gameState.credits)
@@ -109,7 +109,7 @@ class Menu extends Phaser.Scene {
 
         this.cursors = this.input.keyboard.createCursorKeys()
 
-        
+
 
 
     }
@@ -117,13 +117,13 @@ class Menu extends Phaser.Scene {
         if (this.cursors.space.isDown) {
             if (gameState.credits > 0) {
                 gameState.credits -= 1
-            this.scene.start("getReady");
+                this.scene.start("getReady");
             }
         }
 
 
 
-        
+
     }
 
 }
