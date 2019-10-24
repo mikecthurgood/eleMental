@@ -2,10 +2,11 @@ class NewHiscore extends Phaser.Scene {
 
   constructor() {
     super({ key: "newHiscore" });
-    this.name = "";
   }
 
   create() {
+    this.name = "";
+
     const subheadingStyle = { fontSize: "50px", fill: "#FFFFFF" };
     const rowStyle = { fontSize: "40px", fill: "#FFFFFF" };
 
