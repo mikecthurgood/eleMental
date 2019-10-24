@@ -17,8 +17,6 @@ class GetReady extends Phaser.Scene {
         
         gameState.scoreText = this.add.text(100, 750, `Score: ${gameState.score}`, { fontSize: '40px', fill: '#ffffff' })
         gameState.nextLevel = gameState.level.sample()
-
-        // level = ["hello", "friendly", "world"].sample();
           
           
           gameState.readyText = this.add.text(80, 200, `GET READY TO \n  SURVIVE`, { fontSize: '150px', fill: '#ffffff' })

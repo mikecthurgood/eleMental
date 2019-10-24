@@ -8,23 +8,26 @@ const config = {
         arcade: {
             gravity: {y : 400},
             enableBody: true,
-            // debug: true
+            debug: true
         }
     },
-    scene: [Menu, GetReady, FireLevel, BoulderLevel, MissileLevel, IceLevel, GameOver, LeaderBoard, NewHiscore]
+    scene: [Menu, GetReady, FireLevel, BoulderLevel, MissileLevel, IceLevel, WindLevel, GameOver, LeaderBoard, NewHiscore]
 };
 const game = new Phaser.Game(config);2
 const gameState = {}
 const projectiles = {}
+const barriers = {}
 gameState.score = 0
 gameState.time = 0
 gameState.scoreTimer = 1000
 gameState.timeOrigin = 7
 gameState.fireDelay = 500
+gameState.windDelay = 500
 gameState.boulderDelay = 700
 gameState.positionX = 600
 gameState.positionY = 400
 let currentlyPlaying = true
+this.name = ""
 
 if (!gameState.credits) {
     gameState.credits = 0
@@ -56,7 +59,7 @@ function smileyMove (smiley) {
     return this[~~(Math.random() * this.length)];
   }
 
-gameState.level = ["missileLevel", "fireLevel", "boulderLevel", "iceLevel"]
+gameState.level = ["missileLevel", "fireLevel", "boulderLevel", "iceLevel", "windLevel"]
 
 function generate(x, y) {
     gameState.blast.x = x;

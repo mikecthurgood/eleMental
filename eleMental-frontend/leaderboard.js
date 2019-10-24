@@ -16,10 +16,23 @@ class LeaderBoard extends Phaser.Scene {
           .then(json => hiscores = json)
           .then(() => renderHiscores());
 
-        const YBASE = 80
+        const YBASE = 30
         const XBASE = 80
 
-        gameState.LeaderBoardText = this.add.text(300, 50, `HIGH SCORES`, { fontSize: '100px', fill: '#ffff00' })
+        gameState.LeaderBoardText = this.add.text(300, 10, `HIGH SCORES`, { fontSize: '100px', fill: '#ffff00' })
+
+        let startText = this.add.text(320, 750, `Press Space Bar to Start New Game`, { fontSize: '30px', fill: '#ffffff' })
+
+        function flashStart() {
+                startText.visible = !startText.visible
+        }
+
+        const flashStartLoop = this.time.addEvent({
+            delay: 250,
+            callback: flashStart,
+            callbackScope: this,
+            loop: true,
+          });
 
         const flashTextLoop = this.time.addEvent({
           delay: 50,

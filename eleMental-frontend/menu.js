@@ -21,6 +21,8 @@ class Menu extends Phaser.Scene {
         gameState.scoreTimer = 1000
         gameState.movementSpeed = 6
         currentlyPlaying = true
+        gameState.levelCounter = 0
+        gameState.windSize = 0.8
         
         fetch("http://localhost:3000/hiscores")
           .then(res => res.json())
@@ -84,6 +86,10 @@ class Menu extends Phaser.Scene {
 
             if(e.key === "5") {
                 this.scene.start("iceLevel");
+            }
+
+            if(e.key === "6") {
+                this.scene.start("windLevel");
             }
 
             if(e.key === "8") {

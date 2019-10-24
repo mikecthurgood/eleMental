@@ -40,18 +40,20 @@ class GameOver extends Phaser.Scene {
         }
 
         const leaderBoardTimer = this.time.addEvent({
-            delay: 3000,
+            delay: 2000,
             callback: enterHiscore,
             callbackScope: this,
             loop: false,
           });
+
+          
     }
 
     update(delta) {
 
-        if(this.cursors.space.isDown) {
-            this.scene.start('menu')  
-        }
+        // if(this.cursors.space.isDown) {
+        //     this.scene.start('menu')  
+        // }
         // if(this.cursors.right.isDown) {
         //     if (gameState.smiley.x < 1110 && (gameState.smiley.y < 715 && gameState.smiley.y > 85)) gameState.smiley.x+=5
         //     else if (gameState.smiley.y > 390 && gameState.smiley.y < 410) gameState.smiley.x+=5 

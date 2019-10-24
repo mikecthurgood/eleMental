@@ -6,25 +6,22 @@ class MissileLevel extends Phaser.Scene {
 
     preload() {
         this.load.image('background-red', 'assets/background red.png');
-        // this.load.image('face', 'assets/scared-face.png');
         this.load.image('missile', 'assets/missile.png');
         this.load.image('explode', 'assets/muzzleflash3.png');
         this.load.image('smoke', 'assets/smoke-puff.png');
         this.load.spritesheet('nerd', 'assets/nerdspritesheet.png', {frameWidth: 67.3, frameHeight: 91.5 })
-
+        this.load.spritesheet('barrier', 'assets/barrier.png', {frameWidth: 220, frameHeight: 187 });
 
     }
 
 
     create() {
 
-        projectiles.missiles = []   
         gameState.nextLevel = gameState.level.sample()
         gameState.time = gameState.timeOrigin
 
 
         this.background = this.add.image(600,400,'background-red');
-       
         gameState.timerText = this.add.text(500, 200, `${gameState.time}`, { fontSize: '400px', fill: '#ffffff' })
 
         function decreaseTimer() {
@@ -36,14 +33,38 @@ class MissileLevel extends Phaser.Scene {
        
         gameState.scoreText = this.add.text(100, 750, 'Score: 0', { fontSize: '40px', fill: '#ffffff' })
         
+        const blocks = this.physics.add.staticGroup()
         const missiles = this.physics.add.group()
 
-        projectiles.missile = missiles.create(100, 100, 'missile')
+        this.anims.create({
+          key: 'flash',
+          frames: this.anims.generateFrameNumbers('barrier', { start: 0, end: 1 }),
+          frameRate: 2,
+          repeat: -1
+        });
+
+        barriers.block1 = blocks.create(600, 110, 'barrier').setScale(0.6).refreshBody()
+        // barriers.block1.body.setAllowGravity(false)
+        barriers.block1.anims.play('flash', true);4
+
+
+        barriers.block2 = blocks.create(600, 700, 'barrier').setScale(0.6).refreshBody()
+        // barriers.block2.body.setAllowGravity(false)
+        barriers.block2.anims.play('flash', true);
+
+        barriers.block3 = blocks.create(100, 400, 'barrier').setScale(0.6).refreshBody()
+        // barriers.block3.body.setAllowGravity(false)
+        barriers.block3.anims.play('flash', true);
+
+        barriers.block4 = blocks.create(1100, 400, 'barrier').setScale(0.6).refreshBody()
+        // barriers.block4.body.setAllowGravity(false)
+        barriers.block4.anims.play('flash', true);
+
+        if (gameState.positionX > 599) projectiles.missile = missiles.create(100, 100, 'missile')
+        else projectiles.missile = missiles.create(1000, 100, 'missile')
             .setVelocity(gameState.speed, 0);
             projectiles.missile.setScale(.6)
             projectiles.missile.body.setAllowGravity(false)
-            projectiles.missiles.push(projectiles.missile)
-
 
           const scoreLoop = this.time.addEvent({
             delay: 1000,
@@ -52,8 +73,6 @@ class MissileLevel extends Phaser.Scene {
             loop: true,
           });
           
-          
-
           function increaseScore() {
             if (currentlyPlaying === true) {
             gameState.score += 10;
@@ -72,9 +91,7 @@ class MissileLevel extends Phaser.Scene {
         gameState.smiley.body.setAllowGravity(false)
         gameState.smiley.body.setSize(30, 40)
 
-
         this.cursors = this.input.keyboard.createCursorKeys()
-
 
         this.anims.create({
           key: 'up',
@@ -121,6 +138,10 @@ class MissileLevel extends Phaser.Scene {
     
         gameState.nuke.setCallback('onUpdate', draw, [], this);
     
+        this.physics.add.collider(blocks, gameState.smiley, () => {
+          console.log('overlapping')
+        })
+
         this.physics.add.overlap(gameState.smiley, missiles, (missile) => {
           currentlyPlaying = false
           generate(gameState.smiley.x, gameState.smiley.y)
@@ -134,17 +155,12 @@ class MissileLevel extends Phaser.Scene {
           });
         })
 
+     
+        
+        
         function gameOver() {
           this.scene.start('gameOver')
         }
-
-
-      //   this.physics.add.collider(gameState.smiley, projectiles.missile, (rocket) => {
-      //       currentlyPlaying = false
-      //       this.scene.start('gameOver')
-      // })
-
-
     
     }
 
