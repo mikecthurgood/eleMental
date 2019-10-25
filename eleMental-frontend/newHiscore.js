@@ -58,6 +58,7 @@ class NewHiscore extends Phaser.Scene {
     this.input.keyboard.on("keyup_ENTER", submitHiscore, this)
 
     function submitHiscore(e) {
+      if (this.name.length < 3) return;
       const game = this;
       const config = {
         method: "POST",
